@@ -29,7 +29,7 @@ class ScraperController extends Controller
     public function index(){
 
         $client = new Client();
-        $crawler = $client->request('GET', env('FFF_NEWS_URL'));
+        $crawler = $client->request('GET', env('FFF_NEWS_URL', 'https://www.fff.fr/equipes-de-france/1/france-a/actualites'));
 
         $title = $crawler->filter('.title')->each(function ($node) {
 
