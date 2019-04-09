@@ -30,9 +30,12 @@ class ScraperController extends Controller
 
         $client = new Client();
         $crawler = $client->request('GET', env('FFF_NEWS_URL'));
+
         $title = $crawler->filter('.title')->each(function ($node) {
 
+
            $a = self::strip_tags_content($node->html());
+
 
            return trim($a);
 
@@ -46,7 +49,7 @@ class ScraperController extends Controller
 
         });
 
-        $img = $crawler->filter('.post img')->each(function ($node) {
+        $img = $crawler->filter('.newsSlider .post:nth-child(1) img')->each(function ($node) {
 
             $a = $node->attr('src');
 
@@ -66,9 +69,16 @@ class ScraperController extends Controller
 
         });
 
+
+        //Assemble les deux tableau d'image
         $t_img = array_merge($img, $img2);
 
-        $count = count($title);
+
+        //Nettoie le tableau
+        $t_title = array_filter($title);
+
+
+        $count = count($t_title);
 
         // édition du début du fichier XML
         $xml = '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0">';
@@ -77,10 +87,10 @@ class ScraperController extends Controller
         $xml .= '<link>'.env('FFF_NEWS_URL').'</link>';
         $xml .= '<description></description>';
 
-        for ($i=0; $i<=$count-1; $i++){
+        for ($i=0; $i<$count; $i++){
 
             $xml .= '<item>';
-            $xml .= '<title>'.$title[$i].'</title>';
+            $xml .= '<title>'.$t_title[$i].'</title>';
             $xml .= '<link>'.$link[$i].'</link>';
             $xml .= '<description> <![CDATA[ <img src="https://www.fff.fr/'.$t_img[$i].'"/>]]></description>';
             $xml .= '</item>';
