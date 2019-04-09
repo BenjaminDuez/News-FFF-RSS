@@ -29,7 +29,7 @@ class ScraperController extends Controller
     public function index(){
 
         $client = new Client();
-        $crawler = $client->request('GET', 'https://www.fff.fr/equipes-de-france/1/france-a/actualites');
+        $crawler = $client->request('GET', env('FFF_NEWS_URL'));
         $title = $crawler->filter('.title')->each(function ($node) {
 
            $a = self::strip_tags_content($node->html());
@@ -73,9 +73,9 @@ class ScraperController extends Controller
         // édition du début du fichier XML
         $xml = '<?xml version="1.0" encoding="UTF-8"?><rss version="2.0">';
         $xml .= '<channel>';
-        $xml .= '<title>Actualité de la FFF</title>';
-        $xml .= '<link>https://www.fff.fr/equipes-de-france/1/france-a/actualites</link>';
-        $xml .= '<description>Obtenez les dernières actualités sur l\'équipe de France</description>';
+        $xml .= '<title>Actualités FFF</title>';
+        $xml .= '<link>'.env('FFF_NEWS_URL').'</link>';
+        $xml .= '<description></description>';
 
         for ($i=0; $i<=$count-1; $i++){
 

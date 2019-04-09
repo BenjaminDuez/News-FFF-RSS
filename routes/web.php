@@ -11,4 +11,4 @@
 |
 */
 
-Route::get('/fff-actu', 'ScraperController@index');
+Route::get('/', 'ScraperController@index');
